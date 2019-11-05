@@ -1,0 +1,68 @@
+//- player-info.pug
+include ../partials/header.pug
+include ../partials/menu.pug
+
+div.container
+  br
+  div.row
+    div.col-4
+      div.card
+        - let image_src = '../../resources/img/helmet.jpg'
+        if(player_data)
+          - image_src = '../' + player_data[0].img_src
+
+        img.card-img-top#player_img(src= image_src, alt="Football Player")
+        div.card-body.mx-auto
+          form.form(action="/player_info/select_player", method="get")
+            select.custom-select(name="player_id", onchange="this.form.submit()")
+              option(selected) Select Player
+              if(data)
+                //-iterate over each player and add them as an option with ID as value
+                for item in data
+                  option(value= item.id)= item.name
+    div.col-8
+      div.table-responsive
+        table.table
+          //-data exists, fill out table
+          if(player_data && num_games)
+            tr
+              th Year
+              td= player_data[0].year
+            tr
+              th Major
+              td= player_data[0].major
+            tr
+              th Games Played
+              td= num_games[0].count
+            //- rounding numbers in pug/jade: https://stackoverflow.com/questions/21008385/is-it-possible-to-round-in-jade
+            //- calculate average using total number of games
+            tr
+              td= 'Passing Yards: ' + player_data[0].passing_yards
+              td= 'Avg. Passing Yards: ' + (player_data[0].passing_yards/num_games[0].count).toFixed(2)
+            tr
+              td= 'Rushing Yards: ' + player_data[0].rushing_yards
+              td= 'Avg. Rushing Yards: ' + (player_data[0].rushing_yards/num_games[0].count).toFixed(2)
+            tr
+              td= 'Receiving Yards: ' + player_data[0].receiving_yards
+              td= 'Avg. Receiving Yards: ' + (player_data[0].receiving_yards/num_games[0].count).toFixed(2)
+          else
+            tr
+              th Year
+              td ?
+            tr
+              th Major
+              td ?
+            tr
+              th Games Played
+              td ?
+            tr
+              td Passing Yards:
+              td Avg. Passing Yards:
+            tr
+              td Rushing Yards:
+              td Avg. Rushing Yards:
+            tr
+              td Receiving Yards:
+              td Avg. Receiving Yards:
+
+include ../partials/footer.pug
